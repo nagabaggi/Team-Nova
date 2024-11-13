@@ -1,0 +1,43 @@
+import openai
+from langchain.prompts import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain.chains import LLMChain
+from langchain.retrievers import SomeRetriever  # Replace with the appropriate retriever type
+
+# Set your OpenAI API key
+openai.api_key = "your_openai_api_key"  # Replace with your actual OpenAI API key
+
+# Define the prompt template
+prompt_template = """Use the following pieces of context to answer the question at the end.
+If you don't know the answer, just say that you don't know; don't try to make up an answer.
+
+{context}
+
+Question: {question}
+Helpful Answer:"""
+
+QA_CHAIN_PROMPT = PromptTemplate(
+    template=prompt_template, input_variables=["context", "question"]
+)
+
+# Assume 'retriever' is defined and set up correctly
+# Example: retriever = SomeRetriever(...) 
+
+def generate_answer(context, question):
+    response = openai.Completion.create(
+        engine="gpt-4",  # Choose "gpt-4" or "gpt-3.5-turbo"
+        prompt=QA_CHAIN_PROMPT.format(context=context, question=question),
+        max_tokens=200,
+        temperature=0.7,
+        top_p=0.95,
+    )
+    return response.choices[0].text.strip()
+
+# Run the query
+query = "What are the policies affecting delinquency?"
+docs = retriever.get_relevant_documents(query)  # Replace with the correct method to retrieve documents
+context_text = "\n".join([doc.text for doc in docs])  # Assumes each document has a 'text' attribute
+
+# Generate the result
+answer = generate_answer(context=context_text, question=query)
+print("Answer:", answer)
