@@ -1,0 +1,15 @@
+pandas
+pickle
+numpy
+langchain
+langchain-core
+langchain-huggingface
+transformers
+accelerate
+huggingface_hub
+bitsandbytes
+pymupdf
+chromadb
+sentence_transformers
+langchain-community
+faiss-cpu
